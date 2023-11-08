@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Service Requests</title>
+    <style>
+        /* Basic CSS styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .request-container {
+            width: 350px;
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s;
+        }
+
+        .request-container:hover {
+            transform: translateY(-5px);
+        }
+
+        .request-container h2 {
+            font-size: 20px;
+            margin: 0;
+            color: #007BFF;
+        }
+
+        .request-container p {
+            font-size: 16px;
+            margin: 8px 0;
+        }
+
+        .request-container p strong {
+            font-weight: bold;
+            margin-right: 10px;
+            color: #333;
+        }
+
+        /* Button styles */
+        .request-buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .delete-button {
+            background-color: #FF0000;
+            color: #fff;
+            transition: background-color 0.3s;
+        }
+
+        .delete-button:hover {
+            background-color: #FF3333;
+        }
+
+        .confirm-button {
+            background-color: #00FF00;
+            color: #fff;
+            transition: background-color 0.3s;
+        }
+
+        .confirm-button:hover {
+            background-color: #33FF33;
+        }
+
+        /* Styling for coordinated details */
+        .user-details, .service-details {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #f2f2f2;
+            border-radius: 5px;
+        }
+
+        .user-details strong, .service-details strong {
+            color: #007BFF;
+            font-weight: bold;
+        }
+
+        /* Table styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #007BFF;
+            color: #fff;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .request-container {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center; color: #007BFF;">Service Requests</h1>
+    <div class="container">
+        {% for request in service_requests %}
+        <div class="request-container">
+            <h2>Request ID: {{ request.Request_id }}</h2>
+            <div class="user-details">
+                <p><strong>User:</strong> {{ request.user.username }}</p>
+                <p><strong>Street:</strong> {{ request.street }}</p>
+                <p><strong>ZIP Code:</strong> {{ request.zip_code }}</p>
+            </div>
+            <div class="service-details">
+                <p><strong>Service Name:</strong> {{ request.service_name.name }}</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Attribute</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Length (feet):</td>
+                            <td>{{ request.length }}</td>
+                        </tr>
+                        <tr>
+                            <td>Width (feet):</td>
+                            <td>{{ request.width }}</td>
+                        </tr>
+                        <tr>
+                            <td>Water Level (feet):</td>
+                            <td>{{ request.water_level }}</td>
+                        </tr>
+                        <tr>
+                            <td>City:</td>
+                            <td>{{ request.city.city_name }}</td>
+                        </tr>
+                        <tr>
+                            <td>District:</td>
+                            <td>{{ request.district.district_name }}</td>
+                        </tr>
+                        <tr>
+                            <td>Request Date & Time:</td>
+                            <td>{{ request.request_date_time }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- Buttons -->
+            <div class="request-buttons">
+                <div class="buttons">
+                    <button class="button delete-button">Delete</button>
+                    <button class="button confirm-button">Confirm</button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

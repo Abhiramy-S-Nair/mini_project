@@ -1,0 +1,169 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        /* Container Styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #007BFF;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        /* Form Styles */
+        label {
+            display: block;
+            margin-top: 10px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="datetime-local"],
+        select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        select#paymentMethod {
+            appearance: none;
+        }
+
+        button {
+            background-color: #007BFF;
+            color: #fff;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Checkbox Label Styles */
+        input[type="checkbox"] + label {
+            display: inline;
+            margin-left: 5px;
+            color: #333;
+            font-size: 16px;
+        }
+
+        /* Certificate Link Styles */
+        .certificate-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 16px;
+        }
+
+        .certificate-link a {
+            color: #007BFF;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .certificate-link a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Book Your Product</h2>
+        <form action="{% url 'order_view' %}" method="post">
+            {% csrf_token %}
+            {{ form.as_p }} 
+            <!--<label for="product">Select Product:</label>
+            <select id="product" name="product">
+                <option value="product1">Bottled Water</option>
+                <option value="product2">Eco - pack water</option>
+                <option value="product3">Water Can</option>
+                <option value="product3">Water Tank</option>
+            </select>
+            
+            <label for="quantity">Quantity:</label>
+            <input type="number" id="quantity" name="quantity" min="1" required>-->
+            
+           <!---- <label for="mobile">Mobile Number:</label>
+            <input type="tel" id="mobile" name="mobile" required>
+            
+            <label for="pincode">Pincode:</label>
+            <input type="text" id="pincode" name="pincode" required>
+            
+            <label for="locality">Locality:</label>
+            <input type="text" id="locality" name = "locality" required>
+            
+            <label for="street">Street:</label>
+            <input type="text" id="street" name="street" required>
+            
+            <label for="district">District:</label>
+            <select id="district" name="district" required>
+                <option value="Thiruvananthapuram">Thiruvananthapuram</option>
+                <option value="Kollam">Kollam</option>
+                <option value="Alapuzha">Alapuzha</option>
+                <option value="Pathanamthitta">Pathanamthitta</option>
+                <option value="Kottayam">Kottayam</option>
+                <option value="Idukki">Idukki</option>
+                <option value="Ernakulam">Ernakulam</option>
+                <option value="Thrissur">Thrissur</option>
+                <option value="Palakkad">Palakkad</option>
+                <option value="Malappuram">Malappuram</option>
+                <option value="Kozhikode">Kozhikode</option>
+                <option value="Wayanad">Wayanad</option>
+                <option value="Kannur">Kannur</option>
+                <option value="Kasaragod">Kasaragod</option>
+            </select>-->
+            
+             
+            
+ 
+             <!-- Water Quality Certificate Link -->
+             <div class="certificate-link">
+                 <a href="{% static 'assets/images/product/waterpurityresult.pdf' %}" target="_blank" download>Download Water Quality Certificate</a>
+             </div>
+ 
+             <!-- Terms and Conditions -->
+             <input type="checkbox" id="terms" name="terms" required>
+             <label for="terms">I accept the <a href="terms.html">Terms and Conditions</a></label>
+ 
+            <input type="submit" value="Submit" >
+        </form>
+        
+{% if form.errors %}
+<div class="alert alert-danger">
+    {{ form.errors }}
+</div>
+{% endif %}
+    </div>
+
+            
+</body>
+
+
+                  
+
+</html>

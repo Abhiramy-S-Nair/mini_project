@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>All Orders and Address Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+        h1 {
+            background-color: #007bff;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            margin: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 10px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <h1>All Orders and Address Details</h1>
+    {% for order_detail in order_details %}
+    <div class="container">
+        <h3>Order ID: {{ order_detail.order_id }}</h3>
+        <p>Username: {{ order_detail.user }}</p>
+        <p>Product Name: {{ order_detail.product_name }}</p>
+        <p>Product Price: {{ order_detail.product_price }}</p>
+        <p>Quantity: {{ order_detail.quantity }}</p>
+        <p>Mobile Number: {{ order_detail.mobile_number }}</p>
+        <p>Pincode: {{ order_detail.pincode }}</p>
+        <p>City: {{ order_detail.city_name }}</p>
+        <p>Street: {{ order_detail.street }}</p>
+        <p>District: {{ order_detail.district_name }}</p>
+       <!---- <form method="POST" action="{% url 'delete_order' order_detail.order_id %}">
+            {% csrf_token %}
+            <input type="submit" value="Delete">
+        </form>
+        <form method="POST" action="{% url 'confirm_order' order_detail.order_id %}">
+            {% csrf_token %}
+            <input type="submit" value="Confirm">
+        </form>-->
+    </div>
+    {% endfor %}
+</body>
+</html>

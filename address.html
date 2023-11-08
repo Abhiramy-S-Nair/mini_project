@@ -1,0 +1,315 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Waterain</title>
+    <style>
+        .slider-container {
+            max-width: 50%;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .owl-carousel {
+            display: flex;
+        }
+
+        .owl-item {
+            padding: 0 5px;
+        }
+
+        .owl-item img {
+            max-width: 900%;
+            height: auto;
+            max-height: 250px;
+            display: block;
+        }
+
+        .owl-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1;
+        }
+
+        .owl-prev, .owl-next {
+            background: transparent;
+            font-size: 2rem;
+            color: #000;
+            text-align: center;
+        }
+
+        .owl-prev {
+            left: 0;
+            text-align: center;
+        }
+
+        .owl-next {
+            right: 0;
+            text-align: center;
+        }
+
+        .owl-dots {
+            position: absolute;
+            bottom: 20px; /* Adjust this value as needed to position the dots */
+            left: 0;
+            right: 0;
+            text-align: center;
+        }
+
+        .owl-dot {
+            display: inline-block;
+            width: 10px; /* Adjust the dot size */
+            height: 10px;
+            margin: 0 5px; /* Adjust the distance between dots */
+            background: #000;
+            border-radius: 50%;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            max-width: 200px;
+        }
+        .container h2 {
+            text-align: center;
+            color: #333;
+        }
+        .container label {
+            font-weight: bold;
+        }
+        .container select,
+        .container input[type="number"],
+        .container input[type="tel"],
+        .container input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-shadow: none;
+        }
+        .container select {
+            cursor: pointer;
+        }
+        .container input[type="submit"] {
+            background-color: #f03838;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+        .container input[type="submit"]:hover {
+            background-color: #e03c3c;
+        }
+    </style>
+    <link rel="shortcut icon" href="{% static 'assets/images/fav.png'%}" type="image/x-icon">
+    <link rel="shortcut icon" href="{% static 'assets/images/fav.png'%}">
+    <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css'%}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="{% static 'assets/plugins/testimonial/css/owl.carousel.min.css'%}">
+    <link rel="stylesheet" href="{% static 'assets/plugins/testimonial/css/owl.theme.min.css'%}">
+    <link rel="stylesheet" type="text/css" href="{% static 'assets/css/style.css'%}" />
+    <link rel="stylesheet" href="{% static 'assets/css/animate.min.css'%}">
+</head>
+<body class="img js-fullheight" style="background-image: url('{% static 'assets/images/slider/s2.jpg'%}');">
+    
+<header>
+    <div id="menu-jk" class="nav-part shadow-md bg-white navcol">
+        <div class="container-lg">
+            <div class="row  p-2">
+                <div class="col-lg-3 p-2">
+                    <a href="{% url 'index' %}">
+                        <img class="max-230" src="{% static 'assets/images/log.jpg'%}" alt="">
+                    </a>
+                    <a  data-bs-toggle="collapse" data-bs-target="#menu" class="float-end d-lg-none pt-1 ps-3"><i class="bi pt-1 fs-1 cp bi-list"></i></a>
+                </div>
+                <div id="menu" class="col-lg-9 d-none pt-1 d-lg-block">
+                    <ul class="fw-bold nacul fs-7">
+                        <li class="float-start p-3 px-4"><a href="{% url 'index' %}">Home</a></li>
+                        <li class="float-start p-3 px-4"><a href="{% url 'about' %}">About Us</a></li>
+                        <!--<li class="float-start p-3 px-4"><a href="{% url 'products' %}">products</a></li>
+                        <li class="float-start p-3 px-4"><a href="{% url 'blog' %}">blog</a></li>-->
+                        <li class="float-start p-3 px-4"><a href="{% url 'contact' %}">Contact Us</a></li>
+                        <li class="float-end d-none d-md-block pt-2">
+                            
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</header><br><br><br>
+
+<div class="slider-container">
+        <div class="owl-carousel owl-theme">
+            <div class="item"><img class="product-image" src="{% static 'assets/images/product/waterbottleadd.png' %}" alt="Product 1"></div>
+            <div class="item"><img class="product-image" src="{% static 'assets/images/product/watertank.png' %}" alt="Product 2"></div>
+            <div class="item"><img class="product-image" src="{% static 'assets/images/product/watercontainer.png' %}" alt="Product 3"></div>
+            <div class="item"><img class="product-image" src="{% static 'assets/images/product/waterbottle.jpg' %}" alt="Product 4"></div>
+        </div>
+    </div>
+    <div class="container">
+        <h2>Book Your Product</h2>
+        <form action="{% url 'book_product' %}" method="post">
+            {% csrf_token %}
+            {{ form.as_p }} 
+           <!---- <label for="product">Select Product:</label>
+            <select id="product" name="product">
+                <option value="product1">Bottled Water</option>
+                <option value="product2">Eco - pack water</option>
+                <option value="product3">Water Can</option>
+                <option value="product3">Water Tank</option>
+            </select>
+            
+            <label for="quantity">Quantity:</label>
+            <input type="number" id="quantity" name="quantity" min="1" required>-->
+            
+            <!--<label for="mobile">Mobile Number:</label>
+            <input type="tel" id="mobile" name="mobile" required>
+            
+            <label for="pincode">Pincode:</label>
+            <input type="text" id="pincode" name="pincode" required>
+            
+            <label for="locality">Locality:</label>
+            <input type="text" id="locality" name = "locality" required>
+            
+            <label for="street">Street:</label>
+            <input type="text" id="street" name="street" required>
+            
+            <label for="district">District:</label>
+            <select id="district" name="district" required>
+                <option value="Thiruvananthapuram">Thiruvananthapuram</option>
+                <option value="Kollam">Kollam</option>
+                <option value="Alapuzha">Alapuzha</option>
+                <option value="Pathanamthitta">Pathanamthitta</option>
+                <option value="Kottayam">Kottayam</option>
+                <option value="Idukki">Idukki</option>
+                <option value="Ernakulam">Ernakulam</option>
+                <option value="Thrissur">Thrissur</option>
+                <option value="Palakkad">Palakkad</option>
+                <option value="Malappuram">Malappuram</option>
+                <option value="Kozhikode">Kozhikode</option>
+                <option value="Wayanad">Wayanad</option>
+                <option value="Kannur">Kannur</option>
+                <option value="Kasaragod">Kasaragod</option>-->
+            </select>
+            
+            <input type="submit" value="Submit">
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/owl.carousel@2.3.4/dist/owl.carousel.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $(".owl-carousel").owlCarousel({
+                items: 1, /* Display one item at a time */
+                loop: true,
+                margin: 20,
+                nav: true,
+                navText: ["<", ">"],
+                dots: true,
+                dotsContainer: '.owl-dots', /* Assign dots to custom container */
+                autoplay: true,
+                autoplayTimeout: 3000,
+            });
+        });
+    </script>
+</body>
+
+
+<!--- ############ Footer Starts Here ################## -->
+<footer>
+    <div class="inner">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 foot-about">
+                    <h4>About US</h4>
+                    <p>By being a part of Waterain, you're contributing to a brighter future</p>
+                    <ul>
+                        <li>23 Rose Stren Kottayam</li>
+                        <li>waterain@gmail.com</li>
+                        <li>+91 876 766 554</li>
+                    </ul>
+                </div>
+
+                <div class="col-md-3 foot-post">
+                    <h4>Latest Posts</h4>
+                    <div class="post-row">
+                        <div class="image">
+                            <img src="{% static 'assets/images/album/a6.jpg'%}" alt="">
+                        </div>
+                        <div class="detail">
+                            <p> Water Bank: Revolutionizing Access to Clean Water</p>
+                        </div>
+                    </div>
+                    <div class="post-row">
+                        <div class="image">
+                            <img src="{% static 'assets/images/album/a5.jpg'%}" alt="">
+                        </div>
+                        <div class="detail">
+                            <p>The Impact of Water Resource Cleaning: A Closer Look</p>
+                        </div>
+                    </div>
+                    <div class="post-row">
+                        <div class="image">
+                            <img src="{% static 'assets/images/album/a4.jpg'%}" alt="">
+                        </div>
+                        <div class="detail">
+                            <p>Sustainable Water Management: A Key to a Greener Future </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3 foot-services">
+                    <h4>Top Category</h4>
+                    <ul>
+                        <li><a href="">Target Statergy</a></li>
+                        <li><a href="">Web Analytics</a></li>
+                        <li><a href="">Page Monitering</a></li>
+                        <li><a href="">Page Optimization</a></li>
+                        <li><a href="">Target Statergy</a></li>
+                        <li><a href="">Email Marketing</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-md-3 foot-news">
+                    <h4>News Letter</h4>
+                    <p>As we continue our journey toward sustainable water management and conservation, we're excited to share the latest updates and initiatives from Waterain </p>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control mb-0" placeholder="Recipient's username" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                        <div class="input-group-append">
+                            <span class="input-group-text bg-primary" id="basic-addon2"><i class="bi text-white bi-send"></i></span>
+                        </div>
+                    </div>
+                    <ul>
+                        <li><i class="bi bi-facebook"></i></li>
+                        <li><i class="bi bi-twitter"></i></li>
+                        <li><i class="bi bi-instagram"></i></li>
+                        <li><i class="bi bi-linkedin"></i></li>
+                        <li><i class="bi bi-pinterest"></i></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<div class="copy">
+    <div class="container">
+        <a href="https://www.smarteyeapps.com/"></a>
+    </div>
+</div>
+
+<script src="{% static 'assets/js/jquery-3.2.1.min.js'%}"></script>
+<script src="{% static 'assets/js/popper.min.js'%}"></script>
+<script src="{% static 'assets/js/bootstrap.bundle.min.js'%}"></script>
+<script src="{% static 'assets/plugins/scroll-fixed/jquery-scrolltofixed-min.js'%}"></script>
+<script src="{% static 'assets/plugins/testimonial/js/owl.carousel.min.js'%}"></script>
+<script src="{% static 'assets/js/script.js'%}"></script>
+</html>

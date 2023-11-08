@@ -1,0 +1,201 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        /* Your existing styles go here */
+
+        /* Add styles for the top navigation bar */
+        header {
+            background-color: #2c3e50;
+            color: #fff;
+            display: flex;
+			margin-left:0px;
+			margin-right:0px;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        nav ul {
+            list-style-type: none;
+        }
+
+        nav ul li {
+            display: inline;
+            margin-right: 20px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #fff;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #e74c3c;
+        }
+
+        /* Add styles for the left navigation bar */
+        .left-nav {
+		    margin-top:100px;
+            width: 200px;
+            background-color:#2c3e50 ;
+            color: #fff;
+            padding: 10px;
+            position: fixed;
+            top: 0;
+            left: 7px;
+            height: 120%;
+        }
+
+        .left-nav ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .left-nav ul li {
+		    margin-top:50px;
+            margin-bottom: 10px;
+        }
+
+        .left-nav a {
+            text-decoration: none;
+            color: #fff;
+            font-weight: bold;
+        }
+
+        .left-nav a:hover {
+            color: #e74c3c;
+        }
+        
+        /* Rectangular tab styles */
+        .rectangular-tab {
+            background-color: #2c3e50;
+            color: #fff;
+            width: 250px;
+            height: 100px;
+            text-align: center;
+            line-height: 60px;
+            font-size: 18px;
+            position: absolute;
+            top: 200px;
+            left: 260px;
+            cursor: pointer;
+        }
+
+        .rectangular-tab1 {
+            background-color: #2c3e50;
+            color: #fff;
+            width: 250px;
+            height: 100px;
+            text-align: center;
+            line-height: 60px;
+            font-size: 18px;
+            position: absolute;
+            top: 200px;
+            left: 570px;
+            cursor: pointer;
+        }
+
+        .rectangular-tab2 {
+            background-color: #2c3e50;
+            color: #fff;
+            width: 250px;
+            height: 100px;
+            text-align: center;
+            line-height: 60px;
+            font-size: 18px;
+            position: absolute;
+            top: 200px;
+            left: 870px;
+            cursor: pointer;
+        }
+
+        /* Arrow styles */
+        .arrow {
+            position: absolute;
+            top: 250px;
+            left: 360px;
+            font-size: 24px;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        /* Adjust main content area to make space for the left navigation bar */
+        main {
+            margin-left: 220px; /* Adjust this value to leave space for the left navigation bar */
+            padding: 20px;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="left-nav">
+        <ul>
+            <li><a href="http://127.0.0.1:8000/order_address_details/1/ ">Dashboard</a></li>
+            <li><a href="productview.html">Users</a></li>
+			<li><a href="addproduct.html">Workers</a></li>
+			<li><a href="user_list.html">Views</a></li>
+            <li><a href="worker_list.html">View Worker List</a></li>
+            <li><a href="registered_users.html">View User list</a></li>
+            <li><a href="adddistrict.html">add district</a></li>
+            <li><a href="addproduct.html">add product</a></li>
+
+            
+        </ul>
+    </div>
+
+    <header>
+        
+            <h1>Welcome Admin !!</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#dashboard">Dashboard</a></li>
+                <li><a href="#settings">Settings</a></li>
+                <li><a href="{% url 'logout' %}">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+
+
+    <!-- Rectangular tab for Registration Details -->
+    <div class="rectangular-tab">
+        <a href="user_list.html" style="color: #fff; text-decoration: none;">Registration Details</a>
+    </div>
+
+    <div class="rectangular-tab1">
+        <a href="http://127.0.0.1:8000/all_orders_details/" style="color: #fff; text-decoration: none;">booking</a>
+    </div>
+
+    <div class="rectangular-tab2">
+        <a href="adding.html" style="color: #fff; text-decoration: none;">adding</a>
+    </div>
+
+
+    <!-- Arrow to navigate to user_list.html -->
+   <!---- <a href="user_list.html" class="arrow">&#8594;</a>-->
+    
+   
+
+    <footer>
+        <p>Admin Dashboard</p>
+    </footer>
+</body>
+</html>

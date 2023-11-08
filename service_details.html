@@ -1,0 +1,46 @@
+<!-- "service_details.html" -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Service Details</title>
+</head>
+<body>
+    <h1>Service Details</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Service Name</th>
+                <th>Price</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            {% for service in services %}
+            <tr>
+                <td>
+                    <span class="service-name">{{ service.name }}</span>
+                    <input type="text" class="edit-service-name" value="{{ service.name }}" style="display: none;">
+                </td>
+                <td>
+                    <span class="service-price">${{ service.price }}</span>
+                    <input type="number" class="edit-service-price" value="{{ service.price }}" style="display: none;">
+                </td>
+                
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3">No services available.</td>
+            </tr>
+            <tr data-service-id="{{ service.service_id }}"></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+   
+           
+    
+           
+        
+       
+</body>
+</html>

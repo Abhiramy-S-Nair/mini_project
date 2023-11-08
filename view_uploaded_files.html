@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Uploaded Files</title>
+    <style>
+        /* Define a container style for each row */
+        .file-container {
+            border: 1px solid #ddd;
+            margin: 10px;
+            padding: 20px;
+            border-radius: 10px; /* Add rounded corners to the container */
+            background: linear-gradient(45deg, #f2f2f2, #e0e0e0); /* Use a gradient background */
+            transition: transform 0.2s, box-shadow 0.2s; /* Add transitions */
+            width: 300px; /* Set the width of the container */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .file-container:hover {
+            transform: scale(1.05); /* Enlarge the container slightly on hover */
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Style for the container contents */
+        .file-details {
+            margin-bottom: 10px;
+        }
+
+        /* Add more CSS styles here */
+        .file-description {
+            font-weight: bold;
+            color: #333;
+            font-family: 'Arial', sans-serif;
+            font-size: 18px;
+        }
+
+        .date-uploaded {
+            color: #555;
+        }
+
+        .download-link {
+            text-decoration: none;
+            background: linear-gradient(45deg, #007BFF, #0056b3); /* Gradient background for download link */
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            display: inline-block;
+            transition: background 0.3s;
+        }
+
+        .download-link:hover {
+            background: linear-gradient(45deg, #0056b3, #003a74); /* Gradient background on hover */
+        }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center;">Uploaded Files</h1>
+    {% for uploaded_file in uploaded_files %}
+    <div class="file-container">
+        <h2 class="file-details file-description">
+            {{ uploaded_file.description }}
+        </h2>
+        <div class="file-details date-uploaded">
+            <strong>Date Uploaded:</strong> {{ uploaded_file.upload_date }}
+        </div>
+        <div class="file-details">
+            <a href="{{ uploaded_file.pdf_file.url }}" download>Download PDF</a>
+        </div>
+    </div>
+    {% endfor %}
+</body>
+</html>
