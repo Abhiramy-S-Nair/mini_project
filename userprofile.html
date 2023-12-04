@@ -13,7 +13,7 @@
             background-size: cover;
             margin: 0;
             padding: 0;
-            color: 	#000000;
+            color: #000000;
         }
 
         .profile-container {
@@ -34,10 +34,6 @@
             border-top-right-radius: 10px;
         }
 
-        .profile-icon {
-            text-align: center;
-        }
-
         .profile-icon i {
             font-size: 100px;
             color: #fff;
@@ -46,6 +42,7 @@
         .user-name {
             font-size: 24px;
             margin-top: 10px;
+            color: #fff;
         }
 
         .user-options {
@@ -116,15 +113,11 @@
                 <a href="edit_profile">Edit Profile</a>
             </div>
             <div class="user-option">
-                <button>Settings</button>
-            </div>
-            <div class="user-option">
-                <button>History</button>
+                <a href="http://127.0.0.1:8000/order_history/">History</a>
             </div>
         </div>
         <div class="profile-details">
             <h2>About Me</h2>
-            <!--<p>This is where the user's bio or description would be displayed. You can use this space to tell others about yourself and your interests.</p>-->
             <div class="user-details-container">
                 <div class="user-info">Email: {{ user.email }}</div>
                 <div class="user-info">First Name: {{ user.first_name }}</div>

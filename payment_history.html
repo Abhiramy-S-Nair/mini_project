@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment History</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 20px;
+            background-color: #f4f4f4;
+            color: #555;
+        }
+
+        h2 {
+            color: #333;
+            border-bottom: 2px solid #007bff;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+            font-weight: bold;
+        }
+
+        td {
+            background-color: #fff;
+        }
+
+        h3 {
+            color: #007bff;
+        }
+
+        p {
+            margin: 0 0 10px;
+        }
+
+        h4 {
+            color: #28a745;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin-bottom: 5px;
+        }
+
+        div {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            background-color: #fff;
+        }
+        .pay-button {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+  <h2>Payment History</h2>
+
+  {% if payment_details %}
+    {% for payment_info in payment_details %}
+      <div>
+        <h3>Order {{ payment_info.order_assignment.order.id }}</h3>
+        <p>Service: {{ payment_info.order_assignment.order.service }}</p>
+        <p>Payment Status: {{ payment_info.payment_status }}</p>
+        <p>Price: {{ payment_info.price }}</p>
+        <button class="pay-button">Pay</button>
+      </div>
+    {% endfor %}
+  {% else %}
+    <p>No payment history found.</p>
+  {% endif %}
+
+</body>
+</html>

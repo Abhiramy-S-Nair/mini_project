@@ -1,23 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>File Upload Success</title>
+    <title>Product Added</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background-color: #f0f0f0;
             text-align: center;
             padding: 20px;
         }
 
         h1 {
-            color: #007bff;
-        }
-
-        p {
             color: #333;
-            font-size: 18px;
-            margin: 10px 0;
         }
 
         a {
@@ -35,8 +29,7 @@
     </style>
 </head>
 <body>
-    <h1>File Upload Successful</h1>
-    <p>Your files have been successfully uploaded.</p>
-    <p><a href="{% url 'adding' %}">Take me back</a></p>
+    <h1>Product Added Successfully</h1>
+    <a href="{% url 'add_drinking_water' %}">Add Another Product</a>
 </body>
 </html>

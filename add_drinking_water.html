@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>File Upload</title>
+    <title>Add Drinking Water Product</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background-color: #f0f0f0;
             text-align: center;
             padding: 20px;
         }
@@ -16,7 +16,7 @@
 
         form {
             max-width: 400px;
-            margin: 20px auto;
+            margin: 0 auto;
             background-color: #fff;
             padding: 20px;
             border-radius: 5px;
@@ -29,7 +29,7 @@
             font-weight: bold;
         }
 
-        input[type="file"] {
+        input[type="text"], input[type="number"] {
             width: 100%;
             padding: 10px;
             margin-bottom: 10px;
@@ -52,12 +52,11 @@
     </style>
 </head>
 <body>
-    <h1>Upload PDF</h1>
-
-    <form method="post" enctype="multipart/form-data">
+    <h1>Add Drinking Water Product</h1>
+    <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">Upload</button>
+        <button type="submit">Add Product</button>
     </form>
 </body>
 </html>

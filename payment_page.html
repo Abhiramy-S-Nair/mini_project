@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Page</title>
+</head>
+<body>
+    <h1>Payment Page</h1>
+    <p>Order ID: {{ order_id }}</p>
+    <p>Username: {{ username }}</p>
+
+    <!-- Add a form for entering the price -->
+    <form method="post" action="{% url 'process_payment' order_id=order_id %}">
+        {% csrf_token %}
+        <label for="price">Enter Price:</label>
+        <input type="number" name="price" required>
+        <button type="submit" class="payment-button">Submit Payment</button>
+    </form>
+
+</body>
+</html>

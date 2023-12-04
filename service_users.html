@@ -51,7 +51,7 @@
             <h2>{{ service.name }}</h2>
             <p>Price: ${{ service.price }}</p>
             <a href="{% url 'cleaning' %}?service_name={{ service.name }}" class="book-button">Book Now</a>
-
+           
         </div>
         {% endfor %}
     </div>

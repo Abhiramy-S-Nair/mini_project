@@ -21,7 +21,7 @@ from .forms import OrderForm
 from .models import Address
 from .forms import AddressForm 
 from .forms import OrderAddressForm
-from .models import City
+from .models import City,District
 from django.core.mail import send_mail
 from django.conf import settings
 from .models import WorkerProfile
@@ -41,6 +41,12 @@ from django.template.loader import render_to_string
 def index(request):
     return render(request, 'index.html')
 
+def views(request):
+    return render(request, 'views.html')
+
+def orders(request):
+    return render(request, 'orders.html')
+
 def viewrequest (request):
     service_requests = ServiceRequest.objects.all()
     return render(request, 'viewrequest.html', {'service_requests': service_requests})
@@ -50,7 +56,36 @@ def adding(request):
     return render(request, 'adding.html')
 
 
-    
+from .models import UploadedFile
+
+def file_details(request):
+    files = UploadedFile.objects.all()
+    return render(request, 'file_details.html', {'files': files})
+
+from django.http import HttpResponse
+from .forms import FileEditForm
+
+def edit_file(request, file_id):
+    file = get_object_or_404(UploadedFile, pk=file_id)
+
+    if request.method == 'POST':
+        form = FileEditForm(request.POST, instance=file)
+        if form.is_valid():
+            form.save()
+            return redirect('file_details')
+    else:
+        form = FileEditForm(instance=file)
+
+    return render(request, 'edit_file.html', {'form': form, 'file': file})
+
+def delete_file(request, file_id):
+    file = get_object_or_404(UploadedFile, pk=file_id)
+
+    if request.method == 'POST':
+        file.delete()
+        return redirect('file_details')
+
+    return render(request, 'delete_file.html', {'file': file})
 
 def about(request):
     return render(request, 'about.html')
@@ -64,6 +99,9 @@ def blog(request):
 def add_worker(request):
     return render(request, 'add_worker.html')
 
+def admin(request):
+    return render(request, 'admin.html')
+
 def request_worker_signup(request):
     return render(request, 'request_worker_signup.html')
 
@@ -71,7 +109,11 @@ def userprofile(request):
     return render(request, 'userprofile.html')
     
 
+def termsforwater(request):
+    return render(request, 'termsforwater.html')
 
+def termsforcleaning(request):
+    return render(request, 'termsforcleaning.html')
 
 
 def admin_worker_requests(request):
@@ -117,6 +159,15 @@ def book(request):
 def admindashboard (request):
     if 'username' in request.session:
        response = render(request, 'admindashboard.html')
+       response['Cache-Control'] = 'no-store, must-revalidate'
+       return response
+    else:
+       return redirect('index')
+    #return render(request, 'admindashboard.html')
+
+def workmanagerdashboard (request):
+    if 'username' in request.session:
+       response = render(request, 'workmanagerdashboard.html')
        response['Cache-Control'] = 'no-store, must-revalidate'
        return response
     else:
@@ -204,7 +255,11 @@ def user_login(request):
          elif  user1.role == "User":
             login(request,user)
             request.session['username'] = username
-            return redirect("services")  
+            return redirect("services") 
+         elif  user1.role == "workmanager":
+            login(request,user)
+            request.session['username'] = username
+            return redirect("workmanagerdashboard")  
          elif  user1.username == "abhi":
             login(request,user)
             request.session['username'] = username
@@ -356,50 +411,6 @@ def edit_profile(request):
 
     return render(request, 'edit_profile.html', context)
 
-
-
-
-
-
-def waterbooking(request):
-    
-    if request.method == "POST":
-        form = OrderForm(request.POST)
-        
-        if form.is_valid():
-            order = form.save(commit=False)
-            order.user = request.user  # Set the user from the request
-            order.save()
-            return redirect('address')
-        else:
-            print(form.errors)  # For debugging, handle form errors
-    else:
-        initial_data = {
-            'user': request.user,  # Pre-fill the logged-in user
-        }
-        form = OrderForm(initial=initial_data)
-
-    return render(request, 'waterbooking.html', {'form': form})
-
-
-
-def order_view(request):
-    if request.method == 'POST':
-        form = OrderForm(request.POST)
-        if form.is_valid():
-            order = form.save(commit=False)  # Create an Order instance but don't save it yet
-            order.user = request.user  # Assign the logged-in user to the order
-            order.save()  # Save the order to the database
-
-            # You can add a success message here if needed
-            return redirect('address')  # Redirect to a success page or any other page
-    else:
-        form = OrderForm()
-
-    context = {
-        'form': form,
-    }
-    return render(request, 'waterbooking.html', context)
 
 
 
@@ -608,21 +619,23 @@ def activate_user(request, user_id):
 
 
 
+
 def update_worker_profile(request):
     if request.method == 'POST':
         form = WorkerProfileForm(request.POST, request.FILES)
         if form.is_valid():
             worker_profile = form.save(commit=False)
-            worker_profile.user = request.user  # Set the user field
+            worker_profile.user = request.user
             worker_profile.save()
             messages.success(request, 'Worker profile updated successfully!')
-            return redirect('workerdashboard')  # Change 'workerdashboard' to your desired URL
+            return redirect('workerdashboard')
         else:
             messages.error(request, 'Please correct the errors in the form.')
+            print(form.errors)
     else:
-        form = WorkerProfileForm()  # Create a new form if it's a GET request
+        form = WorkerProfileForm()
 
-    return render(request, 'update_worker_profile.html', {'form': form})
+    return render(request, 'update_worker_profile.html', {'form': form, 'messages': messages.get_messages(request)})
 
 from .forms import AddServiceForm  # Import the form you created
 from .models import AddService
@@ -792,5 +805,497 @@ def file_upload_success(request):
 def view_uploaded_files(request):
     uploaded_files = UploadedFile.objects.all()
     return render(request, 'view_uploaded_files.html', {'uploaded_files': uploaded_files})
+
+
+
+from .models import DrinkingWaterProduct
+
+from .forms import DrinkingWaterProductForm
+
+def add_drinking_water(request):
+    if request.method == 'POST':
+        form = DrinkingWaterProductForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('add_drinking_water_success')
+    else:
+        form = DrinkingWaterProductForm()
+
+    return render(request, 'add_drinking_water.html', {'form': form})
+
+def add_drinking_water_success(request):
+    return render(request, 'add_drinking_water_success.html')
+
+
+from django.shortcuts import render, redirect
+from .models import DrinkingWaterProduct
+from .models import WaterOrder
+
+from .forms import WaterOrderForm
+
+def product_list(request):
+    products = DrinkingWaterProduct.objects.all()
+     
+    return render(request, 'product_list.html', {'products': products})
+
+@login_required
+def create_order(request, product_id):
+    product = DrinkingWaterProduct.objects.get(pk=product_id)
+
+    if request.method == 'POST':
+        form = WaterOrderForm(request.POST)
+        if form.is_valid():
+            order = form.save(commit=False)
+            if product.reduce_stock(order.quantity):
+                order.product = product
+                order.user = request.user  # Pre-fill the 'user' field with the current user
+                order.save()
+                return redirect('product_list')
+    else:
+        form = WaterOrderForm(initial={'user': request.user, 'product': product})
+        # Pre-fill the 'user' and 'product' fields in the form
+
+    return render(request, 'create_order.html', {'form': form, 'product': product})
+
+
+from .models import WaterOrder
+
+def view_water_orders(request):
+    water_orders = WaterOrder.objects.all()
+    return render(request, 'view_water_orders.html', {'water_orders': water_orders})
+
+
+def drinking_water_products(request):
+    products = DrinkingWaterProduct.objects.all()
+    return render(request, 'drinking_water_products.html', {'products': products})
+
+
+
+from django.shortcuts import render, get_object_or_404
+from .models import WorkerProfile
+
+def worker_profile_view(request):
+    # Attempt to retrieve the WorkerProfile for the user, or return a 404 error if it doesn't exist
+    worker_profile = get_object_or_404(WorkerProfile, user=request.user)
+
+    context = {
+        'user': request.user,
+        'worker_profile': worker_profile,
+    }
+
+    return render(request, 'workerdashboard.html', context)
+
+def add_workmanager(request):
+    if request.method == "POST":
+        # Extract form data
+        username = request.POST.get('username', None)
+        email = request.POST.get('email', None)
+        password = request.POST.get('password1', None)
+        role = request.POST.get('role', None)
+        first_name = request.POST.get('first_name', None)
+        last_name = request.POST.get('last_name', None)
+
+        if username and email and password and role:
+            # Check if the username or email is already registered
+            if CustomUser.objects.filter(username=username).exists():
+                messages.error(request, "Username already registered.")
+            elif CustomUser.objects.filter(email=email).exists():
+                messages.error(request, "Email already registered.")
+            else:
+                # Create a new CustomUser instance
+                user = CustomUser.objects.create_user(
+                    username=username,
+                    email=email,
+                    role=role,
+                    first_name=first_name,
+                    last_name=last_name,
+                    password=password,
+                )
+                # Log in the user after registration
+                login(request, user)
+               
+
+                # Redirect to the signup page to display the message
+
+                return redirect('index')
+        else:
+            messages.error(request, "Please fill in all the required fields.")
+    
+    # If the request method is not POST or there was an error, render the signup form
+    return render(request, "add_workmanager.html")
+
+from django.shortcuts import render
+from .models import WorkerProfile, CustomUser
+
+def all_worker_profiles(request):
+    try:
+        worker_profiles = WorkerProfile.objects.all()
+        user_details = CustomUser.objects.filter(id__in=[profile.user_id for profile in worker_profiles])
+
+        worker_data = []
+        for worker_profile, user_detail in zip(worker_profiles, user_details):
+            worker_data.append({
+                'worker_id': worker_profile.worker_id,
+                'profile_picture': worker_profile.profile_picture.url,
+                'gender': worker_profile.gender,
+                'mobile_number': worker_profile.mobile_number,
+                'district': worker_profile.district,
+                'bio': worker_profile.bio,
+                'services': worker_profile.services,
+                'experience': worker_profile.experience,
+                'availability': worker_profile.availability,
+                'terms': worker_profile.terms,
+                'username': user_detail.username,
+                'firstname': user_detail.firstname,
+                'lastname': user_detail.lastname,
+                'email': user_detail.email,
+                'role': user_detail.role,
+            })
+
+        return render(request, 'all_worker_profiles.html', {'worker_data': worker_data})
+    except WorkerProfile.DoesNotExist:
+        # Handle the case when no worker profiles exist
+        return render(request, 'all_worker_profiles.html', {'error_message': 'No worker profiles exist'})
+
+def assign_worker(request, district):
+    # Get the District object based on the district name
+    district_object = get_object_or_404(District, district_name=district)
+
+    # Get available workers in the same district
+    available_workers = WorkerProfile.objects.filter(district=district_object)
+
+    # Pass the data to the template
+    context = {'district': district_object, 'available_workers': available_workers}
+
+    return render(request, 'assign_worker.html', context)
+
+# views.py
+#from django.shortcuts import render, redirect
+from .models import ServiceRequest, AssignedWorker
+from .forms import AssignWorkerForm
+
+def assign_cleaning_worker(request, district):
+    # Fetch the service requests for the specified district
+    service_requests = ServiceRequest.objects.filter(district__district_name=district)
+
+    if request.method == 'POST':
+        form = AssignWorkerForm(request.POST)
+        if form.is_valid():
+            selected_workers = form.cleaned_data['selected_workers']
+            service_request_id = form.cleaned_data['service_request_id']
+
+            # Create AssignedWorker instances for each selected worker
+            for worker in selected_workers:
+                AssignedWorker.objects.create(
+                    service_request_id=service_request_id,
+                    worker=worker,
+                    work_status='pending'
+                )
+
+            return redirect('viewrequest.html')  # Redirect to the service requests page after confirmation
+    else:
+        form = AssignWorkerForm()
+
+    context = {
+        'form': form,
+        'service_requests': service_requests,
+        'district': district,
+    }
+
+    return render(request, 'assign_cleaning_worker.html', context)
+
+
+# views.py
+from django.shortcuts import render, redirect
+from .forms import LeaveApplicationForm
+
+def apply_leave(request):
+    if request.method == 'POST':
+        form = LeaveApplicationForm(request.POST, request.FILES)
+        if form.is_valid():
+            # Process the form data and save the leave application
+            leave_application = form.save(commit=False)
+            leave_application.user = request.user
+            leave_application.save()
+
+            return redirect('workerdashboard')  # Redirect to the dashboard after submission
+    else:
+        form = LeaveApplicationForm()
+
+    return render(request, 'apply_leave.html', {'form': form})
+from .models import LeaveApplication
+def view_leave_applications(request):
+    leave_applications = LeaveApplication.objects.all()
+    return render(request, 'view_leave_applications.html', {'leave_applications': leave_applications})
+from django.http import JsonResponse
+
+
+def approve_or_delete_leave(request):
+    if request.method == 'POST':
+        action = request.POST.get('action')
+        application_id = request.POST.get('application_id')
+
+        if action == 'approve':
+            LeaveApplication.objects.filter(leave_application_id=application_id, status='pending').update(status='approved')
+
+        elif action == 'delete':
+            LeaveApplication.objects.filter(leave_application_id=application_id, status='pending').update(status='deleted')
+
+    return redirect('view_leave_applications')
+
+@login_required
+def my_leave_details(request):
+    user = request.user
+    leave_details = LeaveApplication.objects.filter(user=user)
+    return render(request, 'my_leave_details.html', {'leave_details': leave_details})
+
+from django.shortcuts import render, redirect
+from django.http import HttpResponse
+from .models import Orders
+
+from django.shortcuts import get_object_or_404
+
+def submit_order(request):
+    if request.method == 'POST':
+        service = request.POST.get('service')
+        phone = request.POST.get('phone')
+        district_id = request.POST.get('district')
+
+        # Adjust the field name based on your District model
+        district = get_object_or_404(District, district_id=district_id)
+
+        pincode = request.POST.get('pincode')
+        quantity = request.POST.get('quantity')
+        length = request.POST.get('length')
+        width = request.POST.get('width')
+        waterlevel = request.POST.get('waterlevel')
+
+        # Ensure that the values are being correctly retrieved
+        print(f'Service: {service}, Phone: {phone}, District: {district}, Pincode: {pincode}, Quantity: {quantity}, Length: {length}, Width: {width}, Water Level: {waterlevel}')
+
+        order = Orders.objects.create(
+            service=service,
+            user=request.user,
+            phone=phone,
+            district=district,
+            pincode=pincode,
+            quantity=quantity if service == 'water_delivery' else None,
+            length=length if service in ['borewell_cleaning', 'water_tank_cleaning', 'well_cleaning'] else None,
+            width=width if service in ['borewell_cleaning', 'water_tank_cleaning', 'well_cleaning'] else None,
+            waterlevel=waterlevel if service in ['borewell_cleaning', 'water_tank_cleaning', 'well_cleaning'] else None,
+            status='pending'
+        )
+
+        return redirect('index')
+
+    return render(request, "order.html")
+
+
+# views.py
+
+
+
+
+
+
+
+
+
+
+
+
+
+# views.py
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import Orders, WorkerProfile, OrderAssignment
+
+def orders_list(request):
+    orders = Orders.objects.all()
+    return render(request, 'orders_list.html', {'orders': orders})
+
+def confirm_order(request, order_id):
+    order = get_object_or_404(Orders, id=order_id)
+    order.status = 'processing'
+    order.save()
+    return redirect('assigning_worker', order_id=order.id)
+
+def delete_order(request, order_id):
+    order = get_object_or_404(Orders, id=order_id)
+    order.status = 'cancelled'
+    order.save()
+    return redirect('orders_list')
+
+def assigning_worker(request, order_id):
+    order = get_object_or_404(Orders, id=order_id)
+    workers = WorkerProfile.objects.filter(district=order.district)
+    return render(request, 'assigning_worker.html', {'order': order, 'workers': workers})
+
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import Orders, WorkerProfile, OrderWorkerAssignment
+
+def process_assignment(request, order_id):
+    order = get_object_or_404(Orders, id=order_id)
+    
+    
+    workers = WorkerProfile.objects.filter(district=order.district)
+    print(workers)
+    if request.method == 'POST':
+        selected_worker_ids = request.POST.getlist('selected_workers')
+        print(selected_worker_ids)
+        for worker_id in selected_worker_ids:
+            if worker_id.isdigit():
+                worker = get_object_or_404(WorkerProfile, worker_id=worker_id)
+                OrderWorkerAssignment.objects.create(order=order, worker=worker)
+                print(f"OrderWorkerAssignment created for Order {order.id} and Worker {worker_id}")
+
+        order.status = 'processing'
+        order.save()
+
+        return redirect('assignment_success')
+
+    return render(request, 'assigning_worker.html', {'order': order, 'workers': workers})
+
+
+
+
+
+def assignment_success(request):
+    return render(request, 'assignment_success.html')
+
+
+# waterapp/views.py
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from .models import OrderWorkerAssignment, WorkerProfile, Orders
+
+@login_required
+def worker_assignment_details(request):
+    # Assuming the username in CustomUser is the same as the worker's username
+    worker = get_object_or_404(WorkerProfile, user=request.user)
+    assignments = OrderWorkerAssignment.objects.filter(worker=worker)
+
+    return render(request, 'worker_assignment_details.html', {'assignments': assignments})
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from .models import OrderWorkerAssignment, WorkerProfile
+
+@login_required
+def complete_order(request, order_id):
+    # Fetch the order and update the status to 'completed'
+    order_assignment = get_object_or_404(OrderWorkerAssignment, order__id=order_id)
+    
+    # Print some debug information
+    print(f"Before: Order Status - {order_assignment.order.status}")
+    
+    order_assignment.order.status = 'completed'
+    order_assignment.order.save()
+    
+    # Refresh the order_assignment object from the database
+    order_assignment.refresh_from_db()
+    
+    print(f"After: Order Status - {order_assignment.order.status}")
+
+    # Redirect back to the worker_assignment_details page
+    return redirect('worker_assignment_details')
+
+
+from django.shortcuts import render
+from .models import CustomUser, Orders, OrderWorkerAssignment, WorkerProfile
+@login_required
+def order_history(request):
+    # Get the current user
+    user = request.user
+
+    # Retrieve orders for the current user
+    orders = Orders.objects.filter(user=user)
+
+    # Create a list to store order details along with assigned workers
+    order_details = []
+
+    for order in orders:
+        # Retrieve assigned workers for each order
+        assigned_workers = OrderWorkerAssignment.objects.filter(order=order)
+
+        # Collect order and assigned workers details
+        order_info = {
+            'order': order,
+            'assigned_workers': assigned_workers,
+        }
+
+        order_details.append(order_info)
+
+    # Render the template with order details
+    return render(request, 'order_history.html', {'order_details': order_details})
+
+
+
+from django.shortcuts import render, redirect
+
+# Your other view functions
+# views.py
+from django.shortcuts import render, redirect
+from .models import Payment, OrderWorkerAssignment
+
+# Your other view functions
+
+def process_payment(request, order_id):
+    if request.method == 'POST':
+        price = request.POST.get('price')
+        
+        # Get the OrderWorkerAssignment instance based on the order_id
+        order_assignment = OrderWorkerAssignment.objects.get(order__id=order_id)
+
+        # Save payment details to the database
+        user = request.user  # Get the logged-in user
+        payment = Payment(order_assignment=order_assignment, user=user, price=price)
+        payment.save()
+
+        # Process the payment and update your model/database as needed
+        # ...
+
+        # Redirect to a success page or any other page as needed
+        return redirect('worker_assignment_details')
+
+    return render(request, 'payment_page.html', {'order_id': order_id})
+
+
+from django.shortcuts import render
+
+# Your other view functions
+
+def payment_page(request, order_id, username):
+    # Your logic for handling the payment_page
+    # ...
+
+    return render(request, 'payment_page.html', {'order_id': order_id, 'username': username})
+
+# views.py
+from django.shortcuts import render
+from .models import Payment
+# views.py
+from django.shortcuts import render
+from .models import Payment, OrderWorkerAssignment
+
+def payment_history(request):
+    # Assuming you have a user variable representing the logged-in user
+    user = request.user
+    
+    # Fetch order assignments for orders ordered by the logged-in user
+    order_assignments = OrderWorkerAssignment.objects.filter(order__user=user)
+    
+    # Fetch payment details associated with those order assignments
+    payment_details = Payment.objects.filter(order_assignment__in=order_assignments)
+
+    context = {
+        'payment_details': payment_details,
+    }
+
+    return render(request, 'payment_history.html', context)
+
+
+
+
+
+
 
 

@@ -29,32 +29,38 @@
                             </div>
                             <div id="menu" class="col-lg-9 d-none pt-1 d-lg-block">
                                 <ul class="fw-bold nacul fs-7">
-                                    <li class="float-start p-3 px-4"><a href="workerdashboard.html">Dashboard</a></li>
+                                    <li class="float-start p-3 px-4"><a href="admindashboard.html">Dashboard</a></li>
                                     
                                     <li class="float-start p-3 px-4 dropdown">
-                                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Work details </a>
+                                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">View & Edit </a>
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                            <a class="dropdown-item" href="worker_assignment_details/">Work Details</a>
-                                            
+                                            <a class="dropdown-item" href="registered_users.html">User Details</a>
+                                            <a class="dropdown-item" href="worker_list.html">Worker Details</a>
+                                            <a class="dropdown-item" href="http://127.0.0.1:8000/view_leave_applications/">Leave Details</a>
+                                          <a class="dropdown-item" href="service_details.html">Service Details</a>
+                                          <a class="dropdown-item" href="drinking_water_products/">Drinking Water Details</a>
+                                          <a class="dropdown-item" href="file_details.html">Knowledge Hub Details</a>
+
                                         </div>
                                       </li>
                                     <!--<li class="float-start p-3 px-4"><a href="registered_users.html">Users</a></li>-->
                                     <!--<li class="float-start p-3 px-4"><a href="user_list.html">Registration Details</a></li>-->
                                     <li class="float-start p-3 px-4 dropdown">
-                                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Leave Details</a>
+                                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Booking Details</a>
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                          <a class="dropdown-item" href="http://127.0.0.1:8000/apply_leave/">Apply Leave</a>
-                                          <a class="dropdown-item" href="my_leave_details/">Leave Details</a>
+                                          <a class="dropdown-item" href="viewrequest.html">Cleaning Service Details</a>
+                                          <a class="dropdown-item" href="orders_list/">order</a>
+                                          <a class="dropdown-item" href="http://127.0.0.1:8000/view_water_orders/">Drinking Water Order Details</a>
                                         </div>
                                       </li>
                                       <li class="float-start p-3 px-4 dropdown">
                                         <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Add Info</a>
                                         <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                          <a class="dropdown-item" href="http://127.0.0.1:8000/update_worker_profile/ ">Update profile</a>
-                                          <!--<a class="dropdown-item" href="add_drinking_water.html">Add Drinking Water Details</a>
+                                          <a class="dropdown-item" href="add_service.html">Add Service Details</a>
+                                          <a class="dropdown-item" href="add_drinking_water.html">Add Drinking Water Details</a>
                                           <a class="dropdown-item" href="upload_file.html">Add Knowledge Hub Details</a>
                                           <a class="dropdown-item" href="adddistrict.html">Add District Details</a>
-                                          <a class="dropdown-item" href="add_city.html">Add City Details</a>-->
+                                          <a class="dropdown-item" href="add_city.html">Add City Details</a>
                                         </div>
                                       </li>
                                     <li class="float-start p-3 px-4"><a href="{% url 'logout' %}">Logout</a></li>

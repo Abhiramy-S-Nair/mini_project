@@ -9,6 +9,8 @@ from django.forms.widgets import DateTimeInput
 from .models import City
 from .models import WorkerProfile
 from .models import AddService
+from .models import WaterOrder
+from .models import AssignedWorker
 
 class WorkerForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput)
@@ -61,12 +63,18 @@ class OrderAddressForm(forms.ModelForm):
         model = OrderAddress
         fields = ['order', 'address']
 
+
+
+
 class WorkerProfileForm(forms.ModelForm):
     class Meta:
         model = WorkerProfile
         fields = [
             'profile_picture',
             'gender',
+            'mobile_number',
+            'district',
+            
             'bio',
             'services',
             'experience',
@@ -77,6 +85,8 @@ class WorkerProfileForm(forms.ModelForm):
         widgets = {
             'profile_picture': forms.FileInput(attrs={'class': 'form-control'}),
             'gender': forms.Select(attrs={'class': 'form-control'}),
+            'mobile_number': forms.TextInput(attrs={'class': 'form-control'}),
+            'district': forms.Select(attrs={'class': 'form-control'}), 
             'bio': forms.Textarea(attrs={'class': 'form-control'}),
             'services': forms.TextInput(attrs={'class': 'form-control'}),
             'experience': forms.TextInput(attrs={'class': 'form-control'}),
@@ -124,7 +134,79 @@ class UploadFileForm(forms.ModelForm):
         widget=forms.FileInput(),  # Use the default FileInput widget
     )
 
-    
 
 
-   
+class FileEditForm(forms.ModelForm):
+    class Meta:
+        model = UploadedFile
+        fields = ['description']
+
+        
+from .models import DrinkingWaterProduct
+
+class DrinkingWaterProductForm(forms.ModelForm):
+    class Meta:
+        model = DrinkingWaterProduct
+        fields = ['name', 'price', 'quantity']
+
+
+class WaterOrderForm(forms.ModelForm):
+    class Meta:
+        model = WaterOrder
+        fields = ['user','product', 'quantity', 'delivery_date_time', 'city', 'district', 'street','zip_code']  
+        widgets = {
+            'user': forms.HiddenInput(), 
+             'product': forms.HiddenInput(),  # Hidden field for the user
+            'delivery_date_time': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
+        }
+
+class AssignWorkerForm(forms.ModelForm):
+    selected_workers = forms.ModelMultipleChoiceField(
+        queryset=WorkerProfile.objects.all(),
+        widget=forms.CheckboxSelectMultiple
+    )
+
+    class Meta:
+        model = AssignedWorker
+        fields = ['selected_workers']
+
+from django import forms
+from django.forms.widgets import DateInput
+from .models import LeaveApplication
+from datetime import datetime, timedelta
+
+class LeaveApplicationForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # Set the date range for start_date
+        start_date_widget = self.fields['start_date'].widget
+        start_date_widget.attrs['min'] = (datetime.now() - timedelta(days=30)).strftime('%Y-%m-%d')
+        start_date_widget.attrs['max'] = (datetime.now() + timedelta(days=30)).strftime('%Y-%m-%d')
+
+        # Set the date range for end_date
+        end_date_widget = self.fields['end_date'].widget
+        end_date_widget.attrs['min'] = (datetime.now() - timedelta(days=30)).strftime('%Y-%m-%d')
+        end_date_widget.attrs['max'] = (datetime.now() + timedelta(days=30)).strftime('%Y-%m-%d')
+
+    class Meta:
+        model = LeaveApplication
+        fields = ['start_date', 'end_date', 'reason', 'medical_certificate']
+
+        widgets = {
+            'start_date': DateInput(attrs={'type': 'date'}),
+            'end_date': DateInput(attrs={'type': 'date'}),
+        }
+
+    def clean(self):
+        cleaned_data = super().clean()
+        start_date = cleaned_data.get('start_date')
+        end_date = cleaned_data.get('end_date')
+
+        if start_date and end_date and start_date > end_date:
+            raise forms.ValidationError("End date must be equal to or after the start date.")
+
+        return cleaned_data
+
+
+
